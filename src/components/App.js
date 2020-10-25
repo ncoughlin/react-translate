@@ -2,13 +2,27 @@ import React, { Component } from "react";
 
 import UserCreate from "./UserCreate";
 
+import LanguageContext from "../contexts/LanguageContext";
+import ColorContext from "../contexts/ColorContext";
+
 class App extends Component {
-  state = { language: "english" };
+  state = { language: "english", color: "red" };
 
   // change state of language when flag is clicked
-  onLanguageChange = (language) => {
+  changeLanguage = (language) => {
     this.setState({ language });
   };
+
+  // change color of button when flag is clicked
+  changeColor = (color) => {
+    this.setState({ color });
+  };
+
+  // bundle of functions for flag click
+  onFlagClick = (language, color) => {
+    this.changeLanguage(language);
+    this.changeColor(color);
+  }
 
   render() {
     return (
@@ -17,14 +31,18 @@ class App extends Component {
           Select a language:
           <i
             className="flag us"
-            onClick={() => this.onLanguageChange("english")}
+            onClick={() => this.onFlagClick("english","red")}
           />
           <i
             className="flag nl"
-            onClick={() => this.onLanguageChange("dutch")}
+            onClick={() => this.onFlagClick("dutch","blue")}
           />
         </div>
-        <UserCreate />
+        <ColorContext.Provider value={this.state.color}>
+          <LanguageContext.Provider value={this.state.language}>
+            <UserCreate />
+          </LanguageContext.Provider>
+        </ColorContext.Provider>
       </div>
     );
   }
